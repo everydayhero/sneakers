@@ -11,3 +11,16 @@ Sneakers::SignedApplications.register(
   ),
   %i(amount),
 )
+
+Sneakers::SignedApplications.register(
+  "charity_profile_donation",
+  "456",
+  %i(
+    context
+    merchant
+    product
+    quantity
+    amount_discount
+  ),
+  %i(amount),
+)

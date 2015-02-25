@@ -33,6 +33,25 @@ module Sneakers
       new(data, app_name: "supporter_donation")
     end
 
+    def self.charity_profile_donation(id, region, context, merchant, timestamp)
+      data = {
+        id: id,
+        region: region,
+        timestamp: timestamp,
+        manifest: [
+          {
+            context: context,
+            merchant: merchant,
+            product: "direct_donation",
+            quantity: 1,
+            amount_discount: {fractional: "0", currency: "AUD"},
+          },
+        ],
+      }
+
+      new(data, app_name: "charity_profile_donation")
+    end
+
     def signature
       @signature ||= recalculated_signature
     end
