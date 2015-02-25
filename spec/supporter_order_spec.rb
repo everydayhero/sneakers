@@ -11,7 +11,7 @@ module Sneakers
 
     context ".supporter_donation" do
       let(:app_name) { "supporter_donation" }
-      let(:app_key) { "123" }
+      let(:app_key) { ENV.fetch("SUPPORTER_DONATION_KEY") }
       let(:page_id) { SecureRandom.uuid }
       let(:valid_signature) do
         Signature.sign(
@@ -72,7 +72,7 @@ module Sneakers
 
     context ".charity_profile_donation" do
       let(:app_name) { "charity_profile_donation" }
-      let(:app_key) { "456" }
+      let(:app_key) { ENV.fetch("CHARITY_PROFILE_DONATION_KEY") }
       let(:valid_signature) do
         Signature.sign(
           app_name,

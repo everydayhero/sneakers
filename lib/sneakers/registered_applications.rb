@@ -1,6 +1,6 @@
 Sneakers::SignedApplications.register(
   "supporter_donation",
-  "123",
+  ENV.fetch("SUPPORTER_DONATION_KEY"),
   %i(
     context
     merchant
@@ -14,7 +14,7 @@ Sneakers::SignedApplications.register(
 
 Sneakers::SignedApplications.register(
   "charity_profile_donation",
-  "456",
+  ENV.fetch("CHARITY_PROFILE_DONATION_KEY"),
   %i(
     context
     merchant

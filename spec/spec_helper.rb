@@ -28,3 +28,6 @@ module TestHelpers
     {fractional: "0", currency: "AUD"}
   end
 end
+
+require "dotenv"
+Dotenv.load
