@@ -1,0 +1,7 @@
+#!/bin/bash
+
+. $(dirname $0)/../../../bin/rails_bootstrap.sh
+
+payments_bundler_nondeployment
+cp -v .env.example .env
+bin/rake
