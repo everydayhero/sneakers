@@ -1,0 +1,13 @@
+Sneakers::SignedApplications.register(
+  "supporter_donation",
+  "123",
+  %i(
+    context
+    merchant
+    page_id
+    product
+    quantity
+    amount_discount
+  ),
+  %i(amount),
+)

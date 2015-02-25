@@ -2,6 +2,8 @@ require "active_support/core_ext/hash"
 
 module Sneakers
   class Order
+    attr_reader :hash
+
     def initialize(hash, signature: nil, app_name: nil)
       @hash = hash
       unless signature || app_name
@@ -11,7 +13,25 @@ module Sneakers
       @app_name = app_name
     end
 
-    attr_reader :hash
+    def self.supporter_donation(id, region, context, merchant, page_id, time)
+      data = {
+        id: id,
+        region: region,
+        timestamp: time,
+        manifest: [
+          {
+            context: context,
+            merchant: merchant,
+            product: "p2p_donation",
+            quantity: 1,
+            amount_discount: {fractional: "0", currency: "AUD"},
+            page_id: page_id,
+          },
+        ],
+      }
+
+      new(data, app_name: "supporter_donation")
+    end
 
     def signature
       @signature ||= recalculated_signature
