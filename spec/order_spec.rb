@@ -11,22 +11,6 @@ module Sneakers
 
     let(:donation_product) { "p2p_donation" }
 
-    let(:manifest_entry) do
-      {
-        context: donation_context,
-        merchant: donation_merchant,
-        product: donation_product,
-        quantity: 1,
-        amount: TestHelpers.ten_dollars,
-        amount_discount: TestHelpers.zero_dollars,
-        page_id: donation_page_id,
-        thank_as: "Anonymous",
-        message: "Cool",
-        # TODO: signed booleans will be problematic; they can't be bencoded
-        opt_in: true,
-      }
-    end
-
     let(:manifest_dto) do
       [
         context: donation_context,
