@@ -1,5 +1,4 @@
 require "spec_helper"
-require "sneakers/registered_applications"
 
 module Sneakers
   describe Order do
