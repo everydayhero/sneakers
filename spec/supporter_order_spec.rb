@@ -9,8 +9,8 @@ module Sneakers
     let(:donation_id) { SecureRandom.uuid }
 
     context ".supporter_donation" do
-      let(:app_name) { "supporter_donation" }
-      let(:app_key) { ENV.fetch("SUPPORTER_DONATION_KEY") }
+      let(:app_name) { TestHelpers.supporter_donation_app_name }
+      let(:app_key) { TestHelpers.supporter_donation_key }
       let(:page_id) { SecureRandom.uuid }
       let(:valid_signature) do
         Signature.sign(

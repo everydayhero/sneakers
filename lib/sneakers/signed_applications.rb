@@ -11,9 +11,5 @@ module Sneakers
 
       @applications[application.name] = application
     end
-
-    module_function def deregister(name)
-      @applications.delete(name)
-    end
   end
 end

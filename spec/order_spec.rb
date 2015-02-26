@@ -8,7 +8,6 @@ module Sneakers
     let(:donation_context) { "b698a52b-546a-4025-bfac-a5db0ec677c4" }
     let(:donation_merchant) { "88190e57-3e13-4d28-aea2-daa0cf9523cf" }
     let(:donation_page_id) { 123 }
-
     let(:donation_product) { "p2p_donation" }
 
     let(:manifest_dto) do
@@ -72,13 +71,13 @@ module Sneakers
       }
     end
 
-    let(:donation_app) { "supporter" }
-    let(:donation_app_key) { SecureRandom.uuid }
+    let(:app_key) { TestHelpers.supporter_donation_key }
+    let(:app_name) { TestHelpers.supporter_donation_app_name }
 
     let(:signature) do
       Sneakers::Signature.sign(
-        donation_app,
-        donation_app_key,
+        app_name,
+        app_key,
         partial_order_hash,
       )
     end
@@ -95,32 +94,6 @@ module Sneakers
     end
 
     let(:order) { Order.new(order_hash, signature: signature) }
-
-    around do |example|
-      SignedApplications.register(
-        donation_app,
-        donation_app_key,
-        %i(
-          context
-          merchant
-          product
-          quantity
-          amount_discount
-          page_id
-        ),
-        %i(
-          amount
-          page_id
-          thank_as
-          message
-          opt_in
-        )
-      )
-
-      example.run
-
-      SignedApplications.deregister(donation_app)
-    end
 
     it "can extract extract the partial order" do
       expect(order.partial_order_hash).to eq(partial_order_hash)
@@ -143,7 +116,7 @@ module Sneakers
     end
 
     it "can sign an order" do
-      order = Order.new(order_hash, app_name: "supporter")
+      order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
       expect(order.signature).to eq signature
       expect(order.hash).to eq order_hash
     end

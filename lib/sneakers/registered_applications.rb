@@ -9,7 +9,12 @@ Sneakers::SignedApplications.register(
     quantity
     amount_discount
   ),
-  %i(amount),
+  %i(
+    amount
+    thank_as
+    message
+    opt_in
+  ),
 )
 
 Sneakers::SignedApplications.register(
@@ -22,5 +27,7 @@ Sneakers::SignedApplications.register(
     quantity
     amount_discount
   ),
-  %i(amount),
+  %i(
+    amount
+  ),
 )

@@ -1,4 +1,8 @@
 $LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+
+require "dotenv"
+Dotenv.load
+
 require "sneakers"
 
 module TestHelpers
@@ -27,7 +31,12 @@ module TestHelpers
   module_function def zero_dollars
     {fractional: "0", currency: "AUD"}
   end
-end
 
-require "dotenv"
-Dotenv.load
+  module_function def supporter_donation_app_name
+    "supporter_donation"
+  end
+
+  module_function def supporter_donation_key
+    ENV.fetch("SUPPORTER_DONATION_KEY")
+  end
+end
