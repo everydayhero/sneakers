@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cp -v .env.example .env
+bin/rake
