@@ -3,6 +3,7 @@ module Sneakers
     @applications = {}
 
     module_function def fetch(name)
+      require "sneakers/registered_applications"
       @applications.fetch(name)
     end
 
