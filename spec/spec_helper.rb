@@ -25,11 +25,11 @@ module TestHelpers
   end
 
   module_function def ten_dollars
-    {fractional: "1000", currency: "AUD"}
+    {amount: "1000", currency: "AUD"}
   end
 
   module_function def zero_dollars
-    {fractional: "0", currency: "AUD"}
+    {amount: "0", currency: "AUD"}
   end
 
   module_function def supporter_donation_app_name

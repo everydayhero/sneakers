@@ -24,7 +24,7 @@ module Sneakers
             merchant: merchant,
             product: "p2p_donation",
             quantity: 1,
-            amount_discount: {fractional: "0", currency: "AUD"},
+            amount_discount: {amount: "0", currency: "AUD"},
             page_id: page_id,
           },
         ],
@@ -44,7 +44,7 @@ module Sneakers
             merchant: merchant,
             product: "direct_donation",
             quantity: 1,
-            amount_discount: {fractional: "0", currency: "AUD"},
+            amount_discount: {amount: "0", currency: "AUD"},
           },
         ],
       }
