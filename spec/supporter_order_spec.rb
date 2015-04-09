@@ -16,19 +16,22 @@ module Sneakers
         Signature.sign(
           app_name,
           app_key,
-          id: donation_id,
-          region: region_code,
+          order_id: donation_id,
+          region_code: region_code,
           timestamp: timestamp,
-          manifest: [
-            {
-              context: financial_context_id,
-              merchant: merchant_id,
-              product: "p2p_donation",
-              quantity: 1,
-              amount_discount: TestHelpers.zero_dollars,
-              page_id: page_id,
-            },
-          ],
+          manifest: {
+            currency: "AUD",
+            components: [
+              {
+                context: financial_context_id,
+                merchant: merchant_id,
+                product: "p2p_donation",
+                quantity: 1,
+                amount_discount: TestHelpers.zero_dollars,
+                page_id: page_id,
+              },
+            ],
+          },
         )
       end
 
@@ -46,20 +49,23 @@ module Sneakers
 
         order = Order.new(
           {
-            id: donation_id,
-            region: region_code,
+            order_id: donation_id,
+            region_code: region_code,
             timestamp: timestamp,
-            manifest: [
-              {
-                context: financial_context_id,
-                merchant: merchant_id,
-                product: "p2p_donation",
-                quantity: 1,
-                amount_discount: TestHelpers.zero_dollars,
-                page_id: page_id,
-                amount: TestHelpers.ten_dollars,
-              },
-            ],
+            manifest: {
+              currency: "AUD",
+              components: [
+                {
+                  context: financial_context_id,
+                  merchant: merchant_id,
+                  product: "p2p_donation",
+                  quantity: 1,
+                  amount_discount: TestHelpers.zero_dollars,
+                  page_id: page_id,
+                  amount: TestHelpers.ten_dollars,
+                },
+              ],
+            }
           },
           signature: signed_order.signature,
         )
@@ -76,18 +82,21 @@ module Sneakers
         Signature.sign(
           app_name,
           app_key,
-          id: donation_id,
-          region: region_code,
+          order_id: donation_id,
+          region_code: region_code,
           timestamp: timestamp,
-          manifest: [
-            {
-              context: financial_context_id,
-              merchant: merchant_id,
-              product: "direct_donation",
-              quantity: 1,
-              amount_discount: TestHelpers.zero_dollars,
-            },
-          ],
+          manifest: {
+            currency: "AUD",
+            components: [
+              {
+                context: financial_context_id,
+                merchant: merchant_id,
+                product: "direct_donation",
+                quantity: 1,
+                amount_discount: TestHelpers.zero_dollars,
+              },
+            ],
+          },
         )
       end
 
@@ -104,19 +113,22 @@ module Sneakers
 
         order = Order.new(
           {
-            id: donation_id,
-            region: region_code,
+            order_id: donation_id,
+            region_code: region_code,
             timestamp: timestamp,
-            manifest: [
-              {
-                context: financial_context_id,
-                merchant: merchant_id,
-                product: "direct_donation",
-                quantity: 1,
-                amount_discount: TestHelpers.zero_dollars,
-                amount: TestHelpers.ten_dollars,
-              },
-            ],
+            manifest: {
+              currency: "AUD",
+              components: [
+                {
+                  context: financial_context_id,
+                  merchant: merchant_id,
+                  product: "direct_donation",
+                  quantity: 1,
+                  amount_discount: TestHelpers.zero_dollars,
+                  amount: TestHelpers.ten_dollars,
+                },
+              ],
+            },
           },
           signature: signed_order.signature,
         )

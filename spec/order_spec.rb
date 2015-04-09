@@ -11,20 +11,23 @@ module Sneakers
     let(:donation_product) { "p2p_donation" }
 
     let(:manifest_dto) do
-      [
-        context: donation_context,
-        merchant: donation_merchant,
-        product: donation_product,
-        quantity: 1,
-        amount: TestHelpers.ten_dollars,
-        amount_discount: TestHelpers.zero_dollars,
-        data: {
-          page_id: donation_page_id,
-          thank_as: "Anonymous",
-          message: "Cool",
-          opt_in: true,
-        },
-      ]
+      {
+        currency: "AUD",
+        components: [
+          context: donation_context,
+          merchant: donation_merchant,
+          product: donation_product,
+          quantity: 1,
+          amount: TestHelpers.ten_dollars,
+          amount_discount: TestHelpers.zero_dollars,
+          data: {
+            page_id: donation_page_id,
+            thank_as: "Anonymous",
+            message: "Cool",
+            opt_in: true,
+          },
+        ],
+      }.deep_stringify_keys
     end
 
     let(:signed_manifest_entry) do
@@ -51,24 +54,38 @@ module Sneakers
       signed_manifest_entry.merge(unsigned_manifest_entry)
     end
 
+    let(:signed_manifest) do
+      {
+        currency: "AUD",
+        components: [signed_manifest_entry],
+      }
+    end
+
+    let(:manifest) do
+      {
+        currency: "AUD",
+        components: [manifest_entry],
+      }
+    end
+
     let(:order_hash) do
       {
-        id: donation_id,
-        region: donation_region,
+        order_id: donation_id,
+        region_code: donation_region,
         timestamp: donation_time,
         payer: TestHelpers.payer_hash,
-        manifest: [manifest_entry],
+        manifest: manifest,
         funding: TestHelpers.tns_funding_hash,
       }
     end
 
     let(:partial_order_hash) do
       {
-        id: donation_id,
-        region: donation_region,
+        order_id: donation_id,
+        region_code: donation_region,
         timestamp: donation_time,
-        manifest: [signed_manifest_entry],
-      }
+        manifest: signed_manifest,
+      }.deep_stringify_keys
     end
 
     let(:app_key) { TestHelpers.supporter_donation_key }
@@ -84,13 +101,13 @@ module Sneakers
 
     let(:expected_dto) do
       {
-        id: donation_id,
-        region: donation_region,
+        order_id: donation_id,
+        region_code: donation_region,
         timestamp: donation_time,
         payer: TestHelpers.payer_hash,
         manifest: manifest_dto,
         funding: TestHelpers.tns_funding_hash,
-      }
+      }.deep_stringify_keys
     end
 
     let(:order) { Order.new(order_hash, signature: signature) }
@@ -108,7 +125,7 @@ module Sneakers
 
     it "an inauthentic, valid order" do
       hash = order_hash
-      hash[:id] = "1234"
+      hash["order_id"] = "1234"
       order = Order.new(hash, signature: signature)
 
       expect(order).to_not be_authentic
@@ -118,7 +135,7 @@ module Sneakers
     it "can sign an order" do
       order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
       expect(order.signature).to eq signature
-      expect(order.hash).to eq order_hash
+      expect(order.hash).to eq order_hash.deep_stringify_keys
     end
 
     it "an authentic, invalid order" do
