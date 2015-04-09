@@ -5,7 +5,7 @@ module Sneakers
     attr_reader :hash
 
     def initialize(hash, signature: nil, app_name: nil)
-      @hash = hash
+      @hash = hash.deep_stringify_keys
       unless signature || app_name
         raise "must specify either signature or app_name"
       end
@@ -15,19 +15,22 @@ module Sneakers
 
     def self.supporter_donation(id, region, context, merchant, page_id, time)
       data = {
-        id: id,
-        region: region,
+        order_id: id,
+        region_code: region,
         timestamp: time,
-        manifest: [
-          {
-            context: context,
-            merchant: merchant,
-            product: "p2p_donation",
-            quantity: 1,
-            amount_discount: {amount: "0", currency: "AUD"},
-            page_id: page_id,
-          },
-        ],
+        manifest: {
+          currency: currency_of(region),
+          components: [
+            {
+              context: context,
+              merchant: merchant,
+              product: "p2p_donation",
+              quantity: 1,
+              amount_discount: {amount: "0", currency: "AUD"},
+              page_id: page_id,
+            },
+          ],
+        }
       }
 
       new(data, app_name: "supporter_donation")
@@ -35,18 +38,21 @@ module Sneakers
 
     def self.charity_profile_donation(id, region, context, merchant, timestamp)
       data = {
-        id: id,
-        region: region,
+        order_id: id,
+        region_code: region,
         timestamp: timestamp,
-        manifest: [
-          {
-            context: context,
-            merchant: merchant,
-            product: "direct_donation",
-            quantity: 1,
-            amount_discount: {amount: "0", currency: "AUD"},
-          },
-        ],
+        manifest: {
+          currency: currency_of(region),
+          components: [
+            {
+              context: context,
+              merchant: merchant,
+              product: "direct_donation",
+              quantity: 1,
+              amount_discount: {amount: "0", currency: "AUD"},
+            }
+          ],
+        },
       }
 
       new(data, app_name: "charity_profile_donation")
@@ -66,25 +72,25 @@ module Sneakers
 
     def base_valid?
       @hash.keys.all? do |key|
-        BASE_KEYS.include?(key.to_sym) && !@hash[key].blank?
+        BASE_KEYS.include?(key) && !@hash[key].blank?
       end
     end
 
     def manifest_valid?
-      @hash.fetch(:manifest).all? do |entry|
+      @hash.fetch('manifest').fetch('components').all? do |entry|
         entry.keys.all? do |key|
-          app.attributes.include?(key.to_sym)
+          app.attributes.map(&:to_s).include?(key)
         end
       end
     end
 
-    BASE_SIGNED = %i(
-      id
-      region
+    BASE_SIGNED = %w(
+      order_id
+      region_code
       timestamp
     )
 
-    BASE_KEYS = BASE_SIGNED + %i(
+    BASE_KEYS = BASE_SIGNED + %w(
       manifest
       signature
       payer
@@ -92,37 +98,16 @@ module Sneakers
     )
 
     def partial_order_hash
-      @hash.slice(*BASE_SIGNED).merge(
-        manifest: partial_manifest,
-      )
+      @hash.slice(*BASE_SIGNED).merge('manifest' => partial_manifest)
     end
 
     def dto
-      @hash.except(:manifest).merge(manifest: manifest_dto)
-    end
-
-    # XXX: Order Refactoring gets rid of this
-    def current_dto
-      raise "single-manifest only" if manifest_dto.size != 1
-      financial_context_id = manifest_dto.first["context"]
-      merchant_id = manifest_dto.first["merchant"]
-      manifest = [manifest_dto.first.values_at("product", "quantity", "amount")]
-      {
-        donation_id: dto[:id],
-        region_code: dto[:region],
-        financial_context_id: financial_context_id,
-        merchant_id: merchant_id,
-        manifest: {
-          currency: "AUD",
-          components: manifest,
-        }.stringify_keys,
-        funding: dto[:funding],
-      }.stringify_keys
+      @hash.except('manifest').merge('manifest' => manifest_dto)
     end
 
     private
 
-    REAL_MANIFEST = %i(
+    REAL_MANIFEST = %w(
       context
       merchant
       product
@@ -132,11 +117,31 @@ module Sneakers
     )
 
     def manifest_dto
-      @hash.fetch(:manifest).map do |entry|
-        entry.slice(*REAL_MANIFEST).merge(
-          data: entry.except(*REAL_MANIFEST),
-        )
+      @hash.fetch('manifest').dup.tap do |manifest|
+        manifest['components'] = manifest['components'].map do |component|
+          component.slice(*REAL_MANIFEST).merge(
+            'data' => component.except(*REAL_MANIFEST),
+          )
+        end
       end
+    end
+
+    def partial_manifest
+      @hash.fetch('manifest').dup.tap do |manifest|
+        manifest['components'] = manifest['components'].map do |component|
+          component.slice(*app_signed_attributes)
+        end
+      end
+    end
+
+    private_class_method def self.currency_of(region_code)
+      {
+        au: "AUD",
+      }.fetch(region_code.to_sym)
+    end
+
+    def region_code
+      @hash["region_code"]
     end
 
     def recalculated_signature
@@ -152,13 +157,7 @@ module Sneakers
     end
 
     def app_signed_attributes
-      app.signed_attributes
-    end
-
-    def partial_manifest
-      @hash.fetch(:manifest).map do |entry|
-        entry.slice(*app_signed_attributes)
-      end
+      app.signed_attributes.map(&:to_s)
     end
   end
 end
