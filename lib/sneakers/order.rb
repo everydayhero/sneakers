@@ -2,16 +2,27 @@ require "active_support/core_ext/hash"
 
 module Sneakers
   class Order
-    attr_reader :hash
+    BASE_SIGNED = %w(
+      order_id
+      region_code
+      timestamp
+    )
 
-    def initialize(hash, signature: nil, app_name: nil)
-      @hash = hash.deep_stringify_keys
-      unless signature || app_name
-        raise "must specify either signature or app_name"
-      end
-      @signature = signature
-      @app_name = app_name
-    end
+    BASE_KEYS = BASE_SIGNED + %w(
+      manifest
+      signature
+      payer
+      funding
+    )
+
+    REAL_MANIFEST = %w(
+      context
+      merchant
+      product
+      quantity
+      amount
+      amount_discount
+    )
 
     def self.supporter_donation(id, region, context, merchant, page_id, time)
       data = {
@@ -58,6 +69,17 @@ module Sneakers
       new(data, app_name: "charity_profile_donation")
     end
 
+    def initialize(hash, signature: nil, app_name: nil)
+      @hash = hash.deep_stringify_keys
+      unless signature || app_name
+        raise "must specify either signature or app_name"
+      end
+      @signature = signature
+      @app_name = app_name
+    end
+
+    attr_reader :hash
+
     def signature
       @signature ||= recalculated_signature
     end
@@ -84,19 +106,6 @@ module Sneakers
       end
     end
 
-    BASE_SIGNED = %w(
-      order_id
-      region_code
-      timestamp
-    )
-
-    BASE_KEYS = BASE_SIGNED + %w(
-      manifest
-      signature
-      payer
-      funding
-    )
-
     def partial_order_hash
       @hash.slice(*BASE_SIGNED).merge('manifest' => partial_manifest)
     end
@@ -107,41 +116,34 @@ module Sneakers
 
     private
 
-    REAL_MANIFEST = %w(
-      context
-      merchant
-      product
-      quantity
-      amount
-      amount_discount
-    )
+    # TODO: parameterize currency in factory methods
+    private_class_method def self.currency_of(region_code)
+      {
+        au: "AUD",
+        ie: "EUR",
+      }.fetch(region_code.to_sym)
+    end
 
     def manifest_dto
-      @hash.fetch('manifest').dup.tap do |manifest|
-        manifest['components'] = manifest['components'].map do |component|
-          component.slice(*REAL_MANIFEST).merge(
-            'data' => component.except(*REAL_MANIFEST),
-          )
-        end
+      transform_manifest_components do |component|
+        component.slice(*REAL_MANIFEST).merge(
+          'data' => component.except(*REAL_MANIFEST),
+        )
       end
     end
 
     def partial_manifest
-      @hash.fetch('manifest').dup.tap do |manifest|
-        manifest['components'] = manifest['components'].map do |component|
-          component.slice(*app_signed_attributes)
-        end
+      transform_manifest_components do |component|
+        component.slice(*app_signed_attributes)
       end
     end
 
-    private_class_method def self.currency_of(region_code)
-      {
-        au: "AUD",
-      }.fetch(region_code.to_sym)
-    end
-
-    def region_code
-      @hash["region_code"]
+    def transform_manifest_components
+      @hash.fetch('manifest').dup.tap do |manifest|
+        manifest['components'] = manifest['components'].map do |component|
+          yield component
+        end
+      end
     end
 
     def recalculated_signature
