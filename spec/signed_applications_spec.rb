@@ -23,7 +23,7 @@ module Sneakers
 
     it "should retrieve a list of unsigned attributes" do
       expect(app.unsigned_attributes).to eq %w(
-        amount
+        amount_gross
         thank_as
         message
         opt_in

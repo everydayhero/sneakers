@@ -20,7 +20,7 @@ module Sneakers
       merchant
       product
       quantity
-      amount
+      amount_gross
       amount_discount
     )
 
@@ -127,8 +127,8 @@ module Sneakers
     def manifest_dto
       transform_manifest_components do |component|
         component.slice(*REAL_MANIFEST).merge(
-          'data' => component.except(*REAL_MANIFEST),
-        )
+          'extra' => component.except(*REAL_MANIFEST),
+        ).values
       end
     end
 
