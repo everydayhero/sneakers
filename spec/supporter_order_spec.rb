@@ -62,7 +62,7 @@ module Sneakers
                   quantity: 1,
                   amount_discount: TestHelpers.zero_dollars,
                   page_id: page_id,
-                  amount: TestHelpers.ten_dollars,
+                  amount_gross: TestHelpers.ten_dollars,
                 },
               ],
             }
@@ -125,7 +125,7 @@ module Sneakers
                   product: "direct_donation",
                   quantity: 1,
                   amount_discount: TestHelpers.zero_dollars,
-                  amount: TestHelpers.ten_dollars,
+                  amount_gross: TestHelpers.ten_dollars,
                 },
               ],
             },

@@ -13,20 +13,20 @@ module Sneakers
     let(:manifest_dto) do
       {
         currency: "AUD",
-        components: [
-          context: donation_context,
-          merchant: donation_merchant,
-          product: donation_product,
-          quantity: 1,
-          amount: TestHelpers.ten_dollars,
-          amount_discount: TestHelpers.zero_dollars,
-          data: {
+        components: [[
+          donation_context,
+          donation_merchant,
+          donation_product,
+          1,
+          TestHelpers.ten_dollars,
+          TestHelpers.zero_dollars,
+          {
             page_id: donation_page_id,
             thank_as: "Anonymous",
             message: "Cool",
             opt_in: true,
           },
-        ],
+        ]],
       }.deep_stringify_keys
     end
 
@@ -43,7 +43,7 @@ module Sneakers
 
     let(:unsigned_manifest_entry) do
       {
-        amount: TestHelpers.ten_dollars,
+        amount_gross: TestHelpers.ten_dollars,
         thank_as: "Anonymous",
         message: "Cool",
         opt_in: true,

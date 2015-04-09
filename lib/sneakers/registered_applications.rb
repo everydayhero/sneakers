@@ -10,7 +10,7 @@ Sneakers::SignedApplications.register(
     amount_discount
   ),
   %w(
-    amount
+    amount_gross
     thank_as
     message
     opt_in
@@ -28,6 +28,6 @@ Sneakers::SignedApplications.register(
     amount_discount
   ),
   %w(
-    amount
+    amount_gross
   ),
 )
