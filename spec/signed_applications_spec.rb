@@ -11,7 +11,7 @@ module Sneakers
     end
 
     it "should retrieve a list of signed attributes" do
-      expect(app.signed_attributes).to eq %i(
+      expect(app.signed_attributes).to eq %w(
         context
         merchant
         page_id
@@ -22,7 +22,7 @@ module Sneakers
     end
 
     it "should retrieve a list of unsigned attributes" do
-      expect(app.unsigned_attributes).to eq %i(
+      expect(app.unsigned_attributes).to eq %w(
         amount
         thank_as
         message

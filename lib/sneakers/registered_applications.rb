@@ -1,7 +1,7 @@
 Sneakers::SignedApplications.register(
   "supporter_donation",
   ENV.fetch("SUPPORTER_DONATION_KEY"),
-  %i(
+  %w(
     context
     merchant
     page_id
@@ -9,7 +9,7 @@ Sneakers::SignedApplications.register(
     quantity
     amount_discount
   ),
-  %i(
+  %w(
     amount
     thank_as
     message
@@ -20,14 +20,14 @@ Sneakers::SignedApplications.register(
 Sneakers::SignedApplications.register(
   "charity_profile_donation",
   ENV.fetch("CHARITY_PROFILE_DONATION_KEY"),
-  %i(
+  %w(
     context
     merchant
     product
     quantity
     amount_discount
   ),
-  %i(
+  %w(
     amount
   ),
 )

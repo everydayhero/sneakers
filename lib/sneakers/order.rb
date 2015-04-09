@@ -101,7 +101,7 @@ module Sneakers
     def manifest_valid?
       @hash.fetch('manifest').fetch('components').all? do |entry|
         entry.keys.all? do |key|
-          app.attributes.map(&:to_s).include?(key)
+          app.attributes.include?(key)
         end
       end
     end
@@ -159,7 +159,7 @@ module Sneakers
     end
 
     def app_signed_attributes
-      app.signed_attributes.map(&:to_s)
+      app.signed_attributes
     end
   end
 end
