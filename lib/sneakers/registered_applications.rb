@@ -11,6 +11,8 @@ Sneakers::SignedApplications.register(
   ),
   %w(
     amount_gross
+    payer
+    donor
     thank_as
     message
     opt_in
@@ -29,5 +31,7 @@ Sneakers::SignedApplications.register(
   ),
   %w(
     amount_gross
+    payer
+    donor
   ),
 )
