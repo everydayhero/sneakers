@@ -14,10 +14,10 @@ module Sneakers
       expect(app.signed_attributes).to eq %w(
         context
         merchant
-        page_id
         product
         quantity
         amount_discount
+        page_id
       )
     end
 

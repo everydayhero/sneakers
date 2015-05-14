@@ -4,10 +4,10 @@ Sneakers::SignedApplications.register(
   %w(
     context
     merchant
-    page_id
     product
     quantity
     amount_discount
+    page_id
   ),
   %w(
     amount_gross
