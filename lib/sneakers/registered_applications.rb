@@ -13,9 +13,11 @@ Sneakers::SignedApplications.register(
     amount_gross
     payer
     donor
-    thank_as
-    message
-    opt_in
+    opt_in_charity_communication
+    opt_in_resend_tax_receipt
+    supporter_donation_nickname
+    supporter_donation_message
+    anonymous_to_supporter
   ),
 )
 
@@ -33,5 +35,7 @@ Sneakers::SignedApplications.register(
     amount_gross
     payer
     donor
+    opt_in_charity_communication
+    opt_in_resend_tax_receipt
   ),
 )

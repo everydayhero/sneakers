@@ -21,10 +21,13 @@ module Sneakers
           TestHelpers.ten_dollars,
           TestHelpers.zero_dollars,
           {
+            donor: TestHelpers.payer_hash,
+            opt_in_charity_communication: true,
+            opt_in_resend_tax_receipt: true,
             page_id: donation_page_id,
-            thank_as: "Anonymous",
-            message: "Cool",
-            opt_in: true,
+            supporter_donation_nickname: "Anonymous",
+            supporter_donation_message: "Cool",
+            anonymous_to_supporter: false,
           },
         ]],
       }.deep_stringify_keys
@@ -44,9 +47,12 @@ module Sneakers
     let(:unsigned_manifest_entry) do
       {
         amount_gross: TestHelpers.ten_dollars,
-        thank_as: "Anonymous",
-        message: "Cool",
-        opt_in: true,
+        donor: TestHelpers.payer_hash,
+        opt_in_charity_communication: true,
+        opt_in_resend_tax_receipt: true,
+        supporter_donation_nickname: "Anonymous",
+        supporter_donation_message: "Cool",
+        anonymous_to_supporter: false,
       }
     end
 
