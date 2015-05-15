@@ -4,16 +4,20 @@ Sneakers::SignedApplications.register(
   %w(
     context
     merchant
-    page_id
     product
     quantity
     amount_discount
+    page_id
   ),
   %w(
     amount_gross
-    thank_as
-    message
-    opt_in
+    payer
+    donor
+    opt_in_charity_communication
+    opt_in_resend_tax_receipt
+    supporter_donation_nickname
+    supporter_donation_message
+    anonymous_to_supporter
   ),
 )
 
@@ -29,5 +33,9 @@ Sneakers::SignedApplications.register(
   ),
   %w(
     amount_gross
+    payer
+    donor
+    opt_in_charity_communication
+    opt_in_resend_tax_receipt
   ),
 )
