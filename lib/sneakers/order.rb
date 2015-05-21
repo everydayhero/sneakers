@@ -1,4 +1,5 @@
 require "active_support/core_ext/hash"
+require "active_support/security_utils"
 
 module Sneakers
   class Order
@@ -85,7 +86,7 @@ module Sneakers
     end
 
     def authentic?
-      signature == recalculated_signature
+      ActiveSupport::SecurityUtils.secure_compare(signature, recalculated_signature)
     end
 
     def valid?
