@@ -1,6 +1,6 @@
 require "base64"
 require "digest/sha1"
-require "bencode"
+require "sneakers/bencode_helper"
 
 module Sneakers
   class Signature
@@ -23,7 +23,7 @@ module Sneakers
     attr_reader :key
 
     def message
-      @hash.bencode
+      BencodeHelper.bencode_with_booleans(@hash)
     end
 
     def hmac(key, message)
