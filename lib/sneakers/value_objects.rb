@@ -1,32 +1,9 @@
-require 'virtus'
-require "active_support/core_ext/hash"
+require "sneakers/virtus_serializable"
 
 module Sneakers
   module ValueObjects
-    module VirtusSerializable
-      def serialize
-        to_h.each_with_object({}) do |(key, value), hash|
-          if value.respond_to?(:serialize)
-            hash[key] = value.serialize
-          elsif value.respond_to?(:to_ary)
-            hash[key] = value.map do |item|
-              if item.respond_to?(:serialize)
-                item.serialize
-              else
-                item
-              end
-            end
-          elsif value
-            hash[key] = value
-          else
-          end
-        end.deep_stringify_keys
-      end
-    end
-
     class Name
       include VirtusSerializable
-      include Virtus.model
 
       attribute :prefix, String
       attribute :given, String
@@ -37,7 +14,6 @@ module Sneakers
 
     class Address
       include VirtusSerializable
-      include Virtus.model
 
       attribute :street_address, String
       attribute :locality, String
@@ -48,7 +24,6 @@ module Sneakers
 
     class Person
       include VirtusSerializable
-      include Virtus.model
 
       attribute :name, Name
       attribute :email, String
@@ -59,7 +34,6 @@ module Sneakers
     module Donations
       class Donation
         include VirtusSerializable
-        include Virtus.model
 
         attribute :opt_in_charity_communication, Axiom::Types::Boolean
         attribute :opt_in_resend_tax_receipt, Axiom::Types::Boolean
@@ -77,7 +51,6 @@ module Sneakers
     module Payments
       class Money
         include VirtusSerializable
-        include Virtus.model
 
         attribute :amount, BigDecimal
         attribute :currency, String
@@ -95,7 +68,6 @@ module Sneakers
 
       class ManifestItem
         include VirtusSerializable
-        include Virtus.model
 
         attribute :context, String
         attribute :merchant, String
@@ -120,7 +92,6 @@ module Sneakers
 
       class Manifest
         include VirtusSerializable
-        include Virtus.model
 
         attribute :currency, String
         attribute :components, Array[ManifestItem]
@@ -128,7 +99,6 @@ module Sneakers
 
       class Order
         include VirtusSerializable
-        include Virtus.model
 
         attribute :order_id, String
         attribute :region_code, String
