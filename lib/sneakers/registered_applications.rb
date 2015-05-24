@@ -1,41 +1,9 @@
 Sneakers::SignedApplications.register(
   "supporter_donation",
   ENV.fetch("SUPPORTER_DONATION_KEY"),
-  %w(
-    context
-    merchant
-    product
-    quantity
-    amount_discount
-    page_id
-  ),
-  %w(
-    amount_gross
-    payer
-    donor
-    opt_in_charity_communication
-    opt_in_resend_tax_receipt
-    supporter_donation_nickname
-    supporter_donation_message
-    anonymous_to_supporter
-  ),
 )
 
 Sneakers::SignedApplications.register(
   "charity_profile_donation",
   ENV.fetch("CHARITY_PROFILE_DONATION_KEY"),
-  %w(
-    context
-    merchant
-    product
-    quantity
-    amount_discount
-  ),
-  %w(
-    amount_gross
-    payer
-    donor
-    opt_in_charity_communication
-    opt_in_resend_tax_receipt
-  ),
 )
