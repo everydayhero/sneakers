@@ -9,28 +9,31 @@ Signing of partial orders.
 ## Supporter Page P2P Donations
 
 ```
-order = Sneakers::Order.supporter_donation(
-  donation_id,
-  region_code,
+order = Sneakers::Order.supporter(region_code).order(
+  supporter_donation,
+  order_id,
   financial_context_id,
   merchant_id,
-  page_id,
   timestamp,
+  payer,
+  amount,
 )
 order.signature
-order.hash #=> {id: donation_id, region: region_code ...}
+order.hash #=> {id: order_id, region: region_code ...}
 ```
 
 ## Charity Profile Direct Donations
 
 ```
-order = Sneakers::Order.charity_profile_donation(
-  donation_id,
-  region_code,
+order = Sneakers::Order.charity_profile(region_code).order(
+  charity_profile_donation,
+  order_id,
   financial_context_id,
   merchant_id,
   timestamp,
+  payer,
+  amount,
 )
 order.signature
-order.hash #=> {id: donation_id, region: region_code ...}
+order.hash #=> {id: order_id, region: region_code ...}
 ```

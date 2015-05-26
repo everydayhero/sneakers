@@ -10,29 +10,6 @@ module Sneakers
     let(:donation_page_id) { 123 }
     let(:donation_product) { "p2p_donation" }
 
-    let(:manifest_dto) do
-      {
-        currency: "AUD",
-        components: [[
-          donation_context,
-          donation_merchant,
-          donation_product,
-          1,
-          TestHelpers.ten_dollars,
-          TestHelpers.zero_dollars,
-          {
-            donor: TestHelpers.payer_hash,
-            opt_in_charity_communication: true,
-            opt_in_resend_tax_receipt: true,
-            page_id: donation_page_id,
-            supporter_donation_nickname: "Anonymous",
-            supporter_donation_message: "Cool",
-            anonymous_to_supporter: false,
-          },
-        ]],
-      }.deep_stringify_keys
-    end
-
     let(:signed_manifest_entry) do
       {
         context: donation_context,
@@ -81,17 +58,13 @@ module Sneakers
         timestamp: donation_time,
         payer: TestHelpers.payer_hash,
         manifest: manifest,
-        funding: TestHelpers.tns_funding_hash,
       }
     end
 
-    let(:partial_order_hash) do
-      {
-        order_id: donation_id,
-        region_code: donation_region,
-        timestamp: donation_time,
-        manifest: signed_manifest,
-      }.deep_stringify_keys
+    let(:funded_order_hash) do
+      order_hash.merge(
+        funding: TestHelpers.tns_funding_hash,
+      )
     end
 
     let(:app_key) { TestHelpers.supporter_donation_key }
@@ -101,7 +74,7 @@ module Sneakers
       Sneakers::Signature.sign(
         app_name,
         app_key,
-        partial_order_hash,
+        order_hash.except(:funding),
       )
     end
 
@@ -118,43 +91,38 @@ module Sneakers
 
     let(:order) { Order.new(order_hash, signature: signature) }
 
-    it "can extract extract the partial order" do
-      expect(order.partial_order_hash).to eq(partial_order_hash)
-    end
-
-    it "a signed, valid order" do
+    it "a newly signed order is authentic" do
       order = Order.new(order_hash, signature: signature)
 
       expect(order).to be_authentic
-      expect(order).to be_valid
     end
 
-    it "an inauthentic, valid order" do
-      hash = order_hash
-      hash["order_id"] = "1234"
+    it "a tampered order is inauthentic" do
+      hash = order_hash.dup
+      hash[:order_id] = "1234"
       order = Order.new(hash, signature: signature)
 
       expect(order).to_not be_authentic
-      expect(order).to be_valid
+    end
+
+    it "ignores authenticity for funding" do
+      order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
+      expect(order).to be_authentic
+
+      order_with_funding = Order.new(order.hash.merge("funding" => "something"), signature: order.signature)
+      expect(order_with_funding).to be_authentic
+    end
+
+    it "knows that signing an order with funding is probably a huge mistake" do
+      expect do
+        order = Order.new(funded_order_hash, app_name: TestHelpers.supporter_donation_app_name)
+      end.to raise_error
     end
 
     it "can sign an order" do
       order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
       expect(order.signature).to eq signature
       expect(order.hash).to eq order_hash.deep_stringify_keys
-    end
-
-    it "an authentic, invalid order" do
-      hash = order_hash
-      hash[:extra] = "1234"
-      order = Order.new(hash, signature: signature)
-
-      expect(order).to be_authentic
-      expect(order).to_not be_valid
-    end
-
-    it "turns into a dto" do
-      expect(order.dto).to eq(expected_dto)
     end
   end
 end
