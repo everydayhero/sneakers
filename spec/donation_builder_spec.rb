@@ -1,4 +1,4 @@
-require 'sneakers'
+require 'sneakers/authentication'
 require 'securerandom'
 
 module Sneakers
