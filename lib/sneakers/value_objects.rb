@@ -35,6 +35,7 @@ module Sneakers
       class Donation
         include VirtusSerializable
 
+        attribute :intended_gift_amount, String
         attribute :opt_in_charity_communication, Axiom::Types::Boolean
         attribute :opt_in_resend_tax_receipt, Axiom::Types::Boolean
         attribute :donor, Person
