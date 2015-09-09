@@ -27,6 +27,10 @@ module Sneakers
       @signature ||= recalculated_signature
     end
 
+    def app_name
+      @app_name ||= signature.split(":").first
+    end
+
     private
 
     def attempted_to_sign_funded_order?
@@ -35,10 +39,6 @@ module Sneakers
 
     def recalculated_signature
       Signature.sign(app.name, app.key, hash.except(*UNSIGNED_PORTION))
-    end
-
-    def app_name
-      @app_name ||= signature.split(":").first
     end
 
     def app
