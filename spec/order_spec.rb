@@ -124,6 +124,7 @@ module Sneakers
       order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
       expect(order.signature).to eq signature
       expect(order.hash).to eq order_hash.deep_stringify_keys
+      expect(order.app_name).to eq TestHelpers.supporter_donation_app_name
     end
   end
 end
