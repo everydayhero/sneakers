@@ -1,4 +1,5 @@
 require "active_support/core_ext/hash"
+require "sneakers/security_utils"
 
 module Sneakers
   class Order
@@ -29,6 +30,10 @@ module Sneakers
 
     def app_name
       @app_name ||= signature.split(":").first
+    end
+
+    def authentic?
+      SecurityUtils.secure_compare(signature, recalculated_signature)
     end
 
     private

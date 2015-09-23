@@ -1,5 +1,4 @@
-require 'sneakers/authentication'
-require 'securerandom'
+require "spec_helper"
 
 module Sneakers
   RSpec.describe DonationBuilder do
