@@ -1,4 +1,3 @@
-require "sneakers/authentication"
 require "spec_helper"
 
 module Sneakers
