@@ -23,7 +23,7 @@ module Sneakers
     attr_reader :key
 
     def message
-      BencodeHelper.bencode_with_booleans(@hash)
+      BencodeHelper.bencode_object_graph(@hash)
     end
 
     def hmac(key, message)

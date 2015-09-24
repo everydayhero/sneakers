@@ -4,21 +4,24 @@ module Sneakers
   module BencodeHelper
     module_function \
     def transform(value)
-      if value.is_a?(Array)
+      case value
+      when Array
         value.map { |v| transform(v) }
-      elsif value.is_a?(Hash)
+      when Hash
         value.each_with_object({}) { |(h,k), hh| hh[h] = transform(k) }
-      elsif value == true
+      when true
         "true"
-      elsif value == false
+      when false
         "false"
+      when nil
+        ""
       else
         value
       end
     end
 
     module_function \
-    def bencode_with_booleans(object)
+    def bencode_object_graph(object)
       transform(object).bencode
     end
   end
