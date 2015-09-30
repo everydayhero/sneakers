@@ -67,13 +67,13 @@ module Sneakers
       )
     end
 
-    let(:app_key) { TestHelpers.supporter_donation_key }
-    let(:app_name) { TestHelpers.supporter_donation_app_name }
+    let(:public_key) { TestHelpers.supporter_donation_public_key }
+    let(:secret_key) { TestHelpers.supporter_donation_secret_key }
 
     let(:signature) do
       Sneakers::Signature.sign(
-        app_name,
-        app_key,
+        public_key,
+        secret_key,
         order_hash.except(:funding),
       )
     end
@@ -106,7 +106,7 @@ module Sneakers
     end
 
     it "ignores authenticity for funding" do
-      order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
+      order = Order.new(order_hash, public_key: TestHelpers.supporter_donation_public_key)
       expect(order).to be_authentic
 
       order_with_funding = Order.new(order.hash.merge("funding" => "something"), signature: order.signature)
@@ -115,15 +115,16 @@ module Sneakers
 
     it "knows that signing an order with funding is probably a huge mistake" do
       expect do
-        order = Order.new(funded_order_hash, app_name: TestHelpers.supporter_donation_app_name)
-      end.to raise_error
+        Order.new(funded_order_hash, public_key: TestHelpers.supporter_donation_public_key)
+      end.to raise_error(Sneakers::Order::AttemptedToSignFundedOrder)
     end
 
     it "can sign an order" do
-      order = Order.new(order_hash, app_name: TestHelpers.supporter_donation_app_name)
+      order = Order.new(order_hash, public_key: TestHelpers.supporter_donation_public_key)
       expect(order.signature).to eq signature
       expect(order.hash).to eq order_hash.deep_stringify_keys
-      expect(order.app_name).to eq TestHelpers.supporter_donation_app_name
+      expect(order.public_key).to eq TestHelpers.supporter_donation_public_key
+      expect(order.app_name).to eq TestHelpers.supporter_donation_public_key
     end
   end
 end

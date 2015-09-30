@@ -1,9 +1,9 @@
 Sneakers::SignedApplications.register(
-  "supporter_donation",
-  ENV.fetch("SUPPORTER_DONATION_KEY"),
+  ENV.fetch("SUPPORTER_DONATION_PUBLIC_KEY"),
+  ENV.fetch("SUPPORTER_DONATION_SECRET_KEY"),
 )
 
 Sneakers::SignedApplications.register(
-  "charity_profile_donation",
-  ENV.fetch("CHARITY_PROFILE_DONATION_KEY"),
+  ENV.fetch("CHARITY_PROFILE_DONATION_PUBLIC_KEY"),
+  ENV.fetch("CHARITY_PROFILE_DONATION_SECRET_KEY"),
 )
