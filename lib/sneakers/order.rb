@@ -31,6 +31,7 @@ module Sneakers
     def public_key
       @public_key ||= signature.split(":").first
     end
+    alias_method :app_name, :public_key
 
     def authentic?
       SecurityUtils.secure_compare(signature, recalculated_signature)

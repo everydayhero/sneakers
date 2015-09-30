@@ -124,6 +124,7 @@ module Sneakers
       expect(order.signature).to eq signature
       expect(order.hash).to eq order_hash.deep_stringify_keys
       expect(order.public_key).to eq TestHelpers.supporter_donation_public_key
+      expect(order.app_name).to eq TestHelpers.supporter_donation_public_key
     end
   end
 end
