@@ -4,17 +4,25 @@ require "sneakers/order"
 module Sneakers
   class DonationBuilder
     def self.supporter(region_code)
-      new(region_code, "p2p_donation", "supporter_donation")
+      new(
+        region_code,
+        "p2p_donation",
+        ENV.fetch("SUPPORTER_DONATION_PUBLIC_KEY"),
+      )
     end
 
     def self.charity_profile(region_code)
-      new(region_code, "direct_donation", "charity_profile_donation")
+      new(
+        region_code,
+        "direct_donation",
+        ENV.fetch("CHARITY_PROFILE_DONATION_PUBLIC_KEY"),
+      )
     end
 
-    def initialize(region_code, donation_type, app_name)
+    def initialize(region_code, donation_type, public_key)
       @region_code = region_code
       @donation_type = donation_type
-      @app_name = app_name
+      @public_key = public_key
     end
 
     def currency
@@ -59,7 +67,7 @@ module Sneakers
     def order(*args)
       Order.new(
         donation_for(*args).serialize,
-        app_name: @app_name,
+        public_key: @public_key,
       )
     end
   end

@@ -2,12 +2,12 @@ require "spec_helper"
 
 module Sneakers
   describe SignedApplications do
-    let(:app_name) { TestHelpers.supporter_donation_app_name }
-    let(:key) { TestHelpers.supporter_donation_key }
-    let(:app) { SignedApplications.fetch(app_name) }
+    let(:public_key) { TestHelpers.supporter_donation_public_key }
+    let(:secret_key) { TestHelpers.supporter_donation_secret_key }
+    let(:app) { SignedApplications.fetch(public_key) }
 
-    it "should retrieve an app's key" do
-      expect(app.key).to eq(key)
+    it "should retrieve an app's secret key" do
+      expect(app.secret_key).to eq(secret_key)
     end
   end
 end

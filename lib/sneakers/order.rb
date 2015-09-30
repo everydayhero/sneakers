@@ -9,15 +9,15 @@ module Sneakers
 
     AttemptedToSignFundedOrder = Class.new(StandardError)
 
-    def initialize(hash, signature: nil, app_name: nil)
+    def initialize(hash, signature: nil, public_key: nil)
       @hash = hash.deep_stringify_keys
 
-      unless signature || app_name
-        raise "must specify either signature or app_name"
+      unless signature || public_key
+        raise "must specify either signature or public_key"
       end
 
       @signature = signature
-      @app_name = app_name
+      @public_key = public_key
 
       raise AttemptedToSignFundedOrder if attempted_to_sign_funded_order?
     end
@@ -28,8 +28,8 @@ module Sneakers
       @signature ||= recalculated_signature
     end
 
-    def app_name
-      @app_name ||= signature.split(":").first
+    def public_key
+      @public_key ||= signature.split(":").first
     end
 
     def authentic?
@@ -43,11 +43,11 @@ module Sneakers
     end
 
     def recalculated_signature
-      Signature.sign(app.name, app.key, hash.except(*UNSIGNED_PORTION))
+      Signature.sign(app.public_key, app.secret_key, hash.except(*UNSIGNED_PORTION))
     end
 
     def app
-      SignedApplications.fetch(app_name)
+      SignedApplications.fetch(public_key)
     end
   end
 end

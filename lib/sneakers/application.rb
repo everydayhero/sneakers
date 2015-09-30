@@ -1,3 +1,3 @@
 module Sneakers
-  Application = Struct.new(:name, :key)
+  Application = Struct.new(:public_key, :secret_key)
 end

@@ -4,6 +4,7 @@ require "dotenv"
 Dotenv.load
 
 require "sneakers"
+require "sneakers/registered_applications"
 
 module TestHelpers
   module_function def payer_hash
@@ -32,11 +33,11 @@ module TestHelpers
     {amount: "0", currency: "AUD"}
   end
 
-  module_function def supporter_donation_app_name
-    "supporter_donation"
+  module_function def supporter_donation_public_key
+    ENV.fetch("SUPPORTER_DONATION_PUBLIC_KEY")
   end
 
-  module_function def supporter_donation_key
-    ENV.fetch("SUPPORTER_DONATION_KEY")
+  module_function def supporter_donation_secret_key
+    ENV.fetch("SUPPORTER_DONATION_SECRET_KEY")
   end
 end

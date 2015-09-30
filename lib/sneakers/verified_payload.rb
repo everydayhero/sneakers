@@ -7,25 +7,25 @@ module Sneakers
       @hash = hash.deep_stringify_keys
     end
 
-    def sign(app_name)
-      Signature.sign(app_name, key_for(app_name), @hash)
+    def sign(public_key)
+      Signature.sign(public_key, secret_key_for(public_key), @hash)
     end
 
     def authentic?(signature)
       SecurityUtils.secure_compare(
         signature,
-        sign(app_from_signature(signature)),
+        sign(public_key_from_signature(signature)),
       )
     end
 
     private
 
-    def app_from_signature(signature)
+    def public_key_from_signature(signature)
       signature.split(":").first
     end
 
-    def key_for(app_name)
-      SignedApplications.fetch(app_name).key
+    def secret_key_for(public_key)
+      SignedApplications.fetch(public_key).secret_key
     end
   end
 end
