@@ -70,18 +70,26 @@ module Sneakers
       class ManifestItem
         include VirtusSerializable
 
-        attribute :context, String
-        attribute :merchant, String
+        attribute :financial_context_id, String
+        attribute :merchant_id, String
         attribute :product, String
         attribute :quantity, Integer
         attribute :amount_gross, Money
         attribute :amount_discount, Money
         attribute :extra, Hash
 
+        alias :merchant :merchant_id
+        alias :merchant= :merchant_id=
+        alias :context :financial_context_id
+        alias :context= :financial_context_id=
+
+        public :context=
+        public :merchant=
+
         def serialize
           super.values_at(*%w(
-            context
-            merchant
+            financial_context_id
+            merchant_id
             product
             quantity
             amount_gross
