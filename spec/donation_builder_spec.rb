@@ -80,7 +80,7 @@ module Sneakers
     end
 
     let(:order) do
-      Sneakers::DonationBuilder.supporter('au') .order(
+      Sneakers::DonationBuilder.supporter('au').order(
         supporter_donation,
         order_id,
         context,
