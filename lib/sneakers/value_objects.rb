@@ -115,6 +115,25 @@ module Sneakers
         attribute :payer, Person
         attribute :manifest, Manifest
       end
+
+      class OrderFee
+        include VirtusSerializable
+
+        attribute :name, String
+        attribute :amount, Money
+      end
+
+      class OrderFeesCollection
+        include VirtusSerializable
+
+        attribute :components, Array[OrderFee]
+      end
+
+      class OrderFees
+        include VirtusSerializable
+
+        attribute :fees, OrderFeesCollection
+      end
     end
   end
 end
