@@ -133,6 +133,10 @@ module Sneakers
         include VirtusSerializable
 
         attribute :fees, OrderFeesCollection
+
+        def find_by_name(name)
+          fees.components.detect { |fee| fee.name == name }
+        end
       end
     end
   end
