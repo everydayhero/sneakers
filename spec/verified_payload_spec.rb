@@ -2,8 +2,8 @@ require "spec_helper"
 
 module Sneakers
   RSpec.describe VerifiedPayload do
-    let(:hash) { {foo: "bar", baz: "bala"} }
-    let(:verified_payload) { described_class.new(hash) }
+    let(:payload) { {foo: "bar", baz: "bala"} }
+    let(:verified_payload) { described_class.new(payload) }
     let(:public_key) { "foo" }
     let(:secret_key) { "very-secret-key" }
     let(:signature) { "foo:v5mJKW74uUkBdXJ54TiQrvGk0fc=" }
@@ -27,6 +27,12 @@ module Sneakers
         it "is not authentic" do
           expect(verified_payload.authentic?("foo:wrong")).to be_falsy
         end
+      end
+    end
+
+    describe "#payload" do
+      it "exposes payload" do
+        expect(verified_payload.payload).to eq(payload.deep_stringify_keys)
       end
     end
   end
