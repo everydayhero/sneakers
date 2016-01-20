@@ -17,11 +17,7 @@ module Sneakers
           end
 
           def verified_payload
-            Sneakers::VerifiedPayload.new(payload)
-          end
-
-          def payload
-            JSON.parse(request.body.read)
+            Sneakers::VerifiedPayload.new(JSON.parse(request.body.read))
           end
         end
       end

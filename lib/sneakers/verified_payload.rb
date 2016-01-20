@@ -3,12 +3,14 @@ require "sneakers/security_utils"
 
 module Sneakers
   class VerifiedPayload
-    def initialize(hash)
-      @hash = hash.deep_stringify_keys
+    def initialize(payload)
+      @payload = payload.deep_stringify_keys
     end
 
+    attr_reader :payload
+
     def sign(public_key)
-      Signature.sign(public_key, secret_key_for(public_key), @hash)
+      Signature.sign(public_key, secret_key_for(public_key), @payload)
     end
 
     def authentic?(signature)
