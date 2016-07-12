@@ -22,7 +22,7 @@ module Sneakers
               item
             end
           end
-        elsif value
+        elsif value || FalseClass === value
           hash[key] = value
         else
         end
