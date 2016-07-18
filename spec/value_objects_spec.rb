@@ -34,4 +34,9 @@ RSpec.describe Sneakers::ValueObjects::Payments::OrderFees do
     expect(fee.amount.amount).to eq(41.5)
     expect(fee.name).to eq("p2p_donation")
   end
+
+  it "raises InvalidValueObjectAttributes when an error occurs" do
+    expect {described_class.new({fees: 'abc'})}
+      .to raise_error(Sneakers::InvalidValueObjectAttributes)
+  end
 end

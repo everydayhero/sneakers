@@ -8,6 +8,12 @@ module Sneakers
 
     included do
       include Virtus.value_object
+
+      def initialize(attributes = nil)
+        super
+      rescue
+        raise InvalidValueObjectAttributes
+      end
     end
 
     def serialize

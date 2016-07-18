@@ -3,6 +3,7 @@ require "sneakers/version"
 module Sneakers
 end
 
+require "sneakers/errors"
 require "sneakers/order"
 require "sneakers/donation_builder"
 require "sneakers/signature"
