@@ -5,6 +5,7 @@ end
 
 require "sneakers/errors"
 require "sneakers/order"
+require "sneakers/blueprint_builder"
 require "sneakers/donation_builder"
 require "sneakers/signature"
 require "sneakers/application"

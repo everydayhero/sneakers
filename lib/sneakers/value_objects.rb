@@ -139,5 +139,67 @@ module Sneakers
         end
       end
     end
+
+    module Blueprints
+      class FinancialContext
+        include VirtusSerializable
+
+        attribute :id, String
+      end
+
+      class Origin
+        include VirtusSerializable
+
+        attribute :id, String
+        attribute :url, String
+        attribute :share_url, String
+      end
+
+      class Beneficiary
+        include VirtusSerializable
+
+        attribute :id, String
+        attribute :name, String
+      end
+
+      class GiftAmount
+        include VirtusSerializable
+
+        attribute :allow_arbitrary_amount, Boolean
+        attribute :plain, Array[Integer]
+      end
+
+      class Gift
+        include VirtusSerializable
+
+        attribute :financial_context, FinancialContext
+        attribute :origin, Origin
+        attribute :beneficiary, Beneficiary
+        attribute :region, String
+        attribute :type, String
+        attribute :expires_at, String
+        attribute :tax_deductible, Boolean
+        attribute :donor_surcharging, Boolean
+        # This works around nil being coerced into an empty array
+        # See: https://github.com/solnic/virtus/pull/354
+        attribute :payment_instruments, Array[String], coerce: false, default: nil
+        attribute :amount_cents, GiftAmount
+      end
+
+      class App
+        include VirtusSerializable
+
+        attribute :collect, Array[String]
+      end
+
+      class Blueprint
+        include VirtusSerializable
+
+        attribute :complete, Boolean
+        attribute :parent, String
+        attribute :gift, Gift
+        attribute :app, App
+      end
+    end
   end
 end
